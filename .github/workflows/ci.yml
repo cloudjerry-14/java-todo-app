@@ -64,12 +64,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           # optional: set port via secret EC2_SSH_PORT (default 22 if not provided)
           port: ${{ secrets.EC2_SSH_PORT }}
-          timeout: 30
+          timeout: '30s'
           script: |
             set -e
             echo "Logging in to Docker Hub on remote host"
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin || true
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/my-app:${{ github.sha }}
             echo "Pulling image $IMAGE"
             docker pull "$IMAGE"
             echo "Stopping previous container (if any)"
