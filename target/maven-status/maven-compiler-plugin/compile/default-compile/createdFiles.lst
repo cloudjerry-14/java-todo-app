@@ -1,0 +1,6 @@
+com/spectra/my_app/service/TodoService.class
+com/spectra/my_app/controller/TodoController.class
+com/spectra/my_app/controller/TodoRestController.class
+com/spectra/my_app/model/Todo.class
+com/spectra/my_app/MyAppApplication.class
+com/spectra/my_app/repository/TodoRepository.class
