@@ -49,3 +49,30 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/my-app:cache
           cache-to: type=inline
+
+  deploy:
+    name: Deploy to EC2
+    needs: docker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          # optional: set port via secret EC2_SSH_PORT (default 22 if not provided)
+          port: ${{ secrets.EC2_SSH_PORT }}
+          timeout: 30
+          script: |
+            set -e
+            echo "Logging in to Docker Hub on remote host"
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin || true
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+            echo "Pulling image $IMAGE"
+            docker pull "$IMAGE"
+            echo "Stopping previous container (if any)"
+            docker rm -f my-app || true
+            echo "Starting container"
+            docker run -d --name my-app -p 8080:8080 --restart unless-stopped "$IMAGE"

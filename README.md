@@ -17,6 +17,13 @@ Secrets required (set these in the GitHub repository settings -> Secrets -> Acti
 - `DOCKERHUB_USERNAME` – your Docker Hub username
 - `DOCKERHUB_TOKEN` – a Docker Hub access token (or password). A token is recommended.
 
+For automatic deployment to an EC2 host the workflow needs the following additional secrets:
+
+- `EC2_HOST` – public IP or DNS name of your EC2 instance
+- `EC2_USER` – SSH user (for example `ec2-user` for Amazon Linux, `ubuntu` for Ubuntu AMIs)
+- `EC2_SSH_KEY` – the private SSH key (PEM) content for the above user (add as a secret value)
+- `EC2_SSH_PORT` – optional SSH port (defaults to 22 if not set)
+
 Published image name
 --------------------
 
