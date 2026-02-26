@@ -25,4 +25,7 @@ replay_pid*
 
 .gitattributes
 
-.mvn/*
+*.mvn/*
+
+*mvnw
+*mvnw.cmd
